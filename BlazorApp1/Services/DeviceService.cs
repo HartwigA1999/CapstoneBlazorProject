@@ -22,14 +22,14 @@ namespace BlazorApp1.Services
 
         }
         //Creates a new device in the database
-        public Task<Device>CreateDeviceAsync(Device obj)
+        public async Task<Device>CreateDeviceAsync(Device obj)
         {
             _dbContext.Device.Add(obj);
             _dbContext.SaveChanges();
-            return Task.FromResult(obj); 
+            return await Task.FromResult(obj); 
         }
         //updates a device in the database
-        public object UpdateDeviceAsync(Device obj)
+        public async Task<bool> UpdateDeviceAsync(Device obj)
         {
             var Exsisting = _dbContext.Device.Where(x => x.Id == obj.Id).FirstOrDefault();
             if(Exsisting != null)
@@ -43,9 +43,9 @@ namespace BlazorApp1.Services
             }
             else
             {
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
         }
         //delete function, not implemented in this App
         //public Task<bool> DeleteDeviceAsync()
