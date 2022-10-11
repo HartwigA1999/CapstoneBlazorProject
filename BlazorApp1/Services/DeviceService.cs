@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace BlazorApp1.Services
 {
@@ -13,13 +14,8 @@ namespace BlazorApp1.Services
         public async Task<List<Device>>
                 GetDevicesAsync(string strCurrentUser)
         {
-            return await _dbContext.Device
-                     // Only get entries for the current logged in user
-                     .Where(x => x.UserName == strCurrentUser)
-                     // Use AsNoTracking to disable EF change tracking
-                     // Use ToListAsync to avoid blocking a thread
-                     .AsNoTracking().ToListAsync();
-
+            var devices = await _dbContext.Device.Where(x => x.UserName == strCurrentUser).AsNoTracking().ToListAsync();
+            return devices;
         }
         //Creates a new device in the database
         public Task<Device>CreateDeviceAsync(Device obj)
@@ -29,7 +25,7 @@ namespace BlazorApp1.Services
             return Task.FromResult(obj); 
         }
         //updates a device in the database
-        public object UpdateDeviceAsync(Device obj)
+        public async Task<bool> UpdateDeviceAsync(Device obj)
         {
             var Exsisting = _dbContext.Device.Where(x => x.Id == obj.Id).FirstOrDefault();
             if(Exsisting != null)
@@ -43,9 +39,9 @@ namespace BlazorApp1.Services
             }
             else
             {
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
         }
         //delete function, not implemented in this App
         //public Task<bool> DeleteDeviceAsync()

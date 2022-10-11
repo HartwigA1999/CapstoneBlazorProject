@@ -1,0 +1,96 @@
+﻿@page "/devices"
+@using BlazorApp1.Data;
+@using BlazorApp1.Services;
+@using Microsoft.AspNetCore.Authentication;
+
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+
+
+@inherits OwningComponentBase<DeviceService>
+
+<h3>Devices</h3>
+<AuthorizeView>
+
+    <Authorized>
+        <h4> Hello @context.User.Identity?.Name!</h4>
+        @if(devices == null){
+
+        }
+
+
+    </Authorized>
+
+
+
+
+
+
+
+
+
+</AuthorizeView>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask{ get; set; }
+
+    List<Device> devices = new List<Device>();
+    private string UserIdentityName = "";
+
+    protected override async Task OnInitializedAsync(){
+        if (authenticationStateTask!= null)
+        {
+            var user = (await authenticationStateTask).User;
+            if (user.Identity != null){
+                UserIdentityName = user.Identity.Name ?? "";
+
+            }
+        }
+        Device objDevice = new Device();
+        bool Showpopup = false;
+        void ClosePopup()
+        {
+            Showpopup = false;
+        }
+        void AddNewDevice()
+        {
+            objDevice = new Device();
+
+            objDevice.Id = 0;
+            Showpopup = true;
+
+        }
+        async Task SaveDevice()
+        {
+            Showpopup = false;
+
+            if (objDevice.Id == 0)
+            {
+                Device obj = new Device();
+                obj.DateTime = System.DateTime.Now;
+                obj.Humidity = objDevice.Humidity;
+                obj.WindSpd = objDevice.WindSpd;
+                obj.Temp = objDevice.Temp;
+                obj.Name = objDevice.Name;
+                obj.UserName = UserIdentityName;
+
+                var result = Service.CreateDeviceAsync(obj);
+            }
+            else
+            {
+                var result = Service.UpdateDeviceAsync(objDevice);
+            }
+            devices = await Service.GetDevicesAsync(UserIdentityName);
+        }
+
+        void EditDevice(Device thisDevice)
+        {
+            objDevice = thisDevice;
+
+            Showpopup = true;
+
+        }
+
+    }
+
+}

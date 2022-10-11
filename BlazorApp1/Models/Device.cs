@@ -14,6 +14,6 @@ namespace BlazorApp1
         public string UserName { get; set; }
         public int? RandomNum { get; set; }
         public float? Humidity { get; set; }
-        public byte[] DateTime { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }
