@@ -18,11 +18,11 @@ namespace BlazorApp1.Services
             return devices;
         }
         //Creates a new device in the database
-        public Task<Device>CreateDeviceAsync(Device obj)
+        public async Task<Device>CreateDeviceAsync(Device obj)
         {
             _dbContext.Device.Add(obj);
             _dbContext.SaveChanges();
-            return Task.FromResult(obj); 
+            return await Task.FromResult(obj); 
         }
         //updates a device in the database
         public async Task<bool> UpdateDeviceAsync(Device obj)

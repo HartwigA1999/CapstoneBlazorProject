@@ -22,14 +22,14 @@ namespace BlazorApp1.Services
 
         }
         //Creates a new account in the database
-        public Task<User> CreateAccountAsync(User obj)
+        public async Task<User> CreateAccountAsync(User obj)
         {
             _dbContext.User.Add(obj);
             _dbContext.SaveChanges();
-            return Task.FromResult(obj);
+            return await Task.FromResult(obj);
         }
         //updates an account in the database
-        public object UpdateAccountAsync(User obj)
+        public async Task<bool> UpdateAccountAsync(User obj)
         {
             var Exsisting = _dbContext.User.Where(x => x.Id == obj.Id).FirstOrDefault();
             if (Exsisting != null)
@@ -43,12 +43,12 @@ namespace BlazorApp1.Services
             }
             else
             {
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
         }
         //delete account
-        public Task<bool> 
+        public async Task<bool> 
             DeleteAccountAsync(User obj)
         {
             var Exsisting = _dbContext.User.Where(x => x.Id == obj.Id).FirstOrDefault();
@@ -60,9 +60,9 @@ namespace BlazorApp1.Services
             }
             else
             {
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
              
         }
     }
