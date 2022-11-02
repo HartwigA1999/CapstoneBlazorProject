@@ -6,8 +6,8 @@
    "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
-   "OutputContextPath": null,
-   "OutputPath": null,
+   "OutputContextPath": "Data",
+   "OutputPath": "Models",
    "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "BlazorApp1",
    "Schemas": null,
@@ -23,7 +23,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "stoutcapstoneserver.CapstoneDB.dbo",
+   "UiHint": "stoutcapstoneserver.Capstone.dbo",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,

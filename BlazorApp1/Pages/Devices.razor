@@ -1,6 +1,7 @@
 ﻿@page "/devices"
 @using BlazorApp1.Data;
 @using BlazorApp1.Services;
+@using BlazorApp1.Models;
 @using Microsoft.AspNetCore.Authentication;
 
 @inject AuthenticationStateProvider AuthenticationStateProvider;
@@ -73,7 +74,7 @@
                 Device obj = new Device();
               //  obj.DateTime = System.DateTime.Now;
                 obj.Humidity = objDevice.Humidity;
-                obj.WindSpd = objDevice.WindSpd;
+                obj.WindSpeed = objDevice.WindSpeed;
                 obj.Temp = objDevice.Temp;
                 obj.Name = objDevice.Name;
                 obj.UserName = UserIdentityName;

@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using BlazorApp1.Models;
 
-namespace BlazorApp1
+namespace BlazorApp1.Data
 {
     public partial class CapstoneDBContext : DbContext
     {
@@ -27,11 +28,11 @@ namespace BlazorApp1
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.DateTime)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.RandomNum).HasMaxLength(6);
 
                 entity.Property(e => e.UserName).HasMaxLength(100);
             });
@@ -40,26 +41,21 @@ namespace BlazorApp1
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Address).HasMaxLength(50);
+                entity.Property(e => e.Address).HasMaxLength(200);
 
-                entity.Property(e => e.FirstName)
-                    .HasMaxLength(50)
-                    .HasColumnName("First Name");
+                entity.Property(e => e.Email).HasMaxLength(100);
 
-                entity.Property(e => e.LastName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Last Name");
+                entity.Property(e => e.FirstName).HasMaxLength(50);
 
-                entity.Property(e => e.State)
-                    .HasMaxLength(2)
-                    .IsFixedLength();
+                entity.Property(e => e.LastName).HasMaxLength(50);
 
-                entity.Property(e => e.Username).HasMaxLength(50);
+                entity.Property(e => e.State).HasMaxLength(2);
+
+                entity.Property(e => e.UserName).HasMaxLength(100);
 
                 entity.Property(e => e.Zip)
                     .HasMaxLength(5)
-                    .HasColumnName("ZIP")
-                    .IsFixedLength();
+                    .HasColumnName("ZIP");
             });
 
             OnModelCreatingPartial(modelBuilder);

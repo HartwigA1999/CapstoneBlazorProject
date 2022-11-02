@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using BlazorApp1.Models;
+using BlazorApp1.Data;
 namespace BlazorApp1.Services
 {
     public class AccountService
@@ -15,7 +16,7 @@ namespace BlazorApp1.Services
         {
             return await _dbContext.User
                      // Only get entries for the current logged in user
-                     .Where(x => x.Username == strCurrentUser)
+                     .Where(x => x.UserName == strCurrentUser)
                      // Use AsNoTracking to disable EF change tracking
                      // Use ToListAsync to avoid blocking a thread
                      .AsNoTracking().ToListAsync();

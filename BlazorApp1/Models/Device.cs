@@ -3,17 +3,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace BlazorApp1
+namespace BlazorApp1.Models
 {
     public partial class Device
     {
         public int Id { get; set; }
-        public float? Temp { get; set; }
-        public float? WindSpd { get; set; }
-        public string Name { get; set; }
         public string UserName { get; set; }
-        public int? RandomNum { get; set; }
-        public float? Humidity { get; set; }
-        public byte[] DateTime { get; set; }
+        public string Name { get; set; }
+        public string RandomNum { get; set; }
+        public double? Temp { get; set; }
+        public double? Humidity { get; set; }
+        public double? WindSpeed { get; set; }
+        public DateTime? DateTime { get; set; }
     }
 }

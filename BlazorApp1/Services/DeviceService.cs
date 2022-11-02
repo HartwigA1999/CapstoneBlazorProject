@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
+using BlazorApp1.Models;
+using BlazorApp1.Data;
 
 namespace BlazorApp1.Services
 {
@@ -31,7 +33,7 @@ namespace BlazorApp1.Services
             if(Exsisting != null)
             {
                 Exsisting.Temp=obj.Temp;
-                Exsisting.WindSpd=obj.WindSpd;
+                Exsisting.WindSpeed=obj.WindSpeed;
                 Exsisting.Humidity = obj.Humidity;
                 Exsisting.DateTime = obj.DateTime;
                 Exsisting.Name = obj.Name;
