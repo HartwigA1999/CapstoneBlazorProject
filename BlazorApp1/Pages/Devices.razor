@@ -48,7 +48,7 @@
         </table>
         <p>
             <button class="btn btn-success"
-                        onclick="AddNewDevice">
+                        @onclick="AddNewDevice">
                         Add New Device
                     </button>
         </p>
@@ -71,7 +71,7 @@
                                 placeholder="Name"
                                 @bind="obj.Name"/>
                                 <button class="btn btn-success"
-                                onclick="SaveDevice">
+                                @onclick="SaveDevice">
                                 Save
                             </button>&nbsp;
                             @if(obj.Id > 0){
