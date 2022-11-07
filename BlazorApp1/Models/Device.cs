@@ -13,6 +13,7 @@ namespace BlazorApp1.Models
         public string RandomNum { get; set; }
         public double? Temp { get; set; }
         public double? Humidity { get; set; }
+        public double? SoilMoisture { get; set; }
         public double? WindSpeed { get; set; }
         public DateTime? DateTime { get; set; }
     }

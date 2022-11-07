@@ -1,101 +1,220 @@
 ﻿@page "/devices"
-@using BlazorApp1.Data;
-@using BlazorApp1.Services;
-@using BlazorApp1.Models;
-@using Microsoft.AspNetCore.Authentication;
-
-@inject AuthenticationStateProvider AuthenticationStateProvider;
+@using BlazorApp1.Models
+@using BlazorApp1.Services
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 @inherits OwningComponentBase<DeviceService>
-
 <h3>Devices</h3>
+
 <AuthorizeView>
-
     <Authorized>
-        <h4> Hello @context.User.Identity?.Name!</h4>
         @if(devices == null){
+             <p><em>Loading...</em></p>
+        }
+        else{
 
+        <h4>Hello, @context.User.Identity.Name?!</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Temperature</th>
+                    <th>Humidity</th>
+                    <th>WindSpeed</th>
+                    <th>Soil Saturation</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var device in devices){
+                    <tr>
+                        <td>@device.Name</td>
+                        <td>@device.DateTime</td>
+                        <td>@device.Temp</td>
+                        <td>@device.Humidity</td>
+                        <td>@device.WindSpeed</td>
+                        <td>@device.SoilMoisture</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    @onclick="(() => EditDevice(device))">
+                                Edit
+                                </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p>
+            <button class="btn btn-success"
+                        onclick="AddNewDevice">
+                        Add New Device
+                    </button>
+        </p>
+
+        @if(Showpopup){
+                <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Edit Device</h3>
+
+                                <button type="button" class="close"
+                                    @onclick ="ClosePopup">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+
+                            </div>
+                            <div class="modal-body">
+                                <input class="form-control" type="text"
+                                placeholder="Name"
+                                @bind="obj.Name"/>
+                                <button class="btn btn-success"
+                                onclick="SaveDevice">
+                                Save
+                            </button>&nbsp;
+                            @if(obj.Id > 0){
+                                    <button class="btn btn-danger"
+                                @onclick="RemoveDevice">
+                            Delete
+                            </button>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
         }
 
+        @if(AddNew){
+             <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Add new Device</h3>
+                                <button type="button" class="close"
+                                    @onclick ="ClosePopup">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                                <div class="modal-body">
+                                     <input class="form-control" type="text"
+                                    placeholder="Device Number"
+                                    @bind="rng"/>
+                                </div>
+                            </div>
 
+                        </div>
+
+                    </div>
+             </div>
+        }
+
+        }
     </Authorized>
+
+
     <NotAuthorized>
-        Youre not logged in
-
+        <p>You're not signed in</p>
     </NotAuthorized>
-
-
-
-
-
-
-
-
 
 </AuthorizeView>
 
+
+
+
 @code {
+
     [CascadingParameter]
-    private Task<AuthenticationState>? authenticationStateTask{ get; set; }
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
 
     List<Device> devices = new List<Device>();
     private string UserIdentityName = "";
 
-    protected override async Task OnInitializedAsync(){
-        if (authenticationStateTask!= null)
+    //returns all devices related to  that username
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current user
+        if (authenticationStateTask != null)
         {
             var user = (await authenticationStateTask).User;
-            if (user.Identity != null){
+
+            if (user.Identity != null)
+            {
                 UserIdentityName = user.Identity.Name ?? "";
-
             }
-        }
-        Device objDevice = new Device();
-        bool Showpopup = false;
-        void ClosePopup()
-        {
-            Showpopup = false;
-        }
-        void AddNewDevice()
-        {
-            objDevice = new Device();
 
-            objDevice.Id = 0;
+        }
+        devices = await Service.GetDevicesAsync(UserIdentityName);
+    }
+
+    Device obj = new Device();
+    bool Showpopup = false;
+
+    bool AddNew = false;
+
+    string rng = "0000000"; // 7 numbers so it is impossible to get a match on an add.
+
+    void ClosePopup(){
+        Showpopup = false;
+        AddNew = false;
+    }
+
+    void AddNewDevice(){
+        obj = new Device();
+
+        obj.Id = 0;
+        AddNew = true;
+
+    }
+
+    async Task RegisterNewDevice(){
+        if(await Service.RegisterDeviceAsync(rng, UserIdentityName)){
+            //if found
+            AddNew = false;
             Showpopup = true;
-
         }
-        async Task SaveDevice()
-        {
-            Showpopup = false;
-
-            if (objDevice.Id == 0)
-            {
-                Device obj = new Device();
-              //  obj.DateTime = System.DateTime.Now;
-                obj.Humidity = objDevice.Humidity;
-                obj.WindSpeed = objDevice.WindSpeed;
-                obj.Temp = objDevice.Temp;
-                obj.Name = objDevice.Name;
-                obj.UserName = UserIdentityName;
-
-                var result = Service.CreateDeviceAsync(obj);
-            }
-            else
-            {
-                var result = Service.UpdateDeviceAsync(objDevice);
-            }
-            devices = await Service.GetDevicesAsync(UserIdentityName);
-        }
-
-        void EditDevice(Device thisDevice)
-        {
-            objDevice = thisDevice;
-
-            Showpopup = true;
-
+        else{
+            //do nothing(maybe a failed popup later on)
         }
 
     }
 
+    async Task SaveDevice()
+    {
+        Showpopup = false;
+        //new device operation, this is in the code, however I will re implement to properly add exsisting devices using an RNG method
+        if(obj.Id == 0){
+            Device newDevice = new Device();
+            newDevice.DateTime = System.DateTime.Now;
+            newDevice.Humidity = 0;
+            newDevice.Temp = 0;
+            newDevice.SoilMoisture = 0;
+            newDevice.UserName = UserIdentityName;
+            newDevice.WindSpeed = 0;
+            newDevice.Name = obj.Name;
+        }
+        else{
+            //device is not new
+            var result = Service.UpdateDeviceAsync(obj);
+        }
+
+        devices = await Service.GetDevicesAsync(UserIdentityName);
+    }
+
+    void EditDevice(Device device2){
+        obj = device2;
+
+        Showpopup = true;
+
+
+    }
+    async Task RemoveDevice(){
+        //does not remove device from the database, only removes it from the user's vision
+        //possibly making an admin setting in the future to directly manage the database.
+        Showpopup = false;
+        obj.Name = "";
+        obj.UserName = "";
+        var result = await Service.UpdateDeviceAsync(obj);
+    }
+}
 }

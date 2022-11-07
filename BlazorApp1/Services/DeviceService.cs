@@ -45,6 +45,24 @@ namespace BlazorApp1.Services
             }
             return await Task.FromResult(true);
         }
+        public async Task<bool> RegisterDeviceAsync(string rng, string username)
+        {
+            Device dev = new Device();
+
+            dev = await _dbContext.Device.Where(x => x.RandomNum == rng).FirstOrDefaultAsync();
+
+            if(dev != null)
+            {
+                dev.UserName = username;
+                dev.RandomNum = "FILLED";
+                return await Task.FromResult(true);
+                
+            }
+            else
+            {
+                return await Task.FromResult(false);
+            }
+        }
         //delete function, not implemented in this App
         //public Task<bool> DeleteDeviceAsync()
         //{
