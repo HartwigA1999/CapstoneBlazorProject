@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorApp1.Areas.Identity
+namespace BlazorApp1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,17 +19,17 @@ namespace BlazorApp1.Areas.Identity
             Device dev = new Device();
             //find device with proper id
             dev = await _dbContext.Device.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if(dev == null) { return BadRequest(); }
+            if (dev == null) { return BadRequest(); }
 
             else
             {
-                if(RNG.Length != 6)
+                if (RNG.Length != 6)
                 {
                     return BadRequest();
                 }
-                for(int i = 0; i <6; i++)
+                for (int i = 0; i < 6; i++)
                 {
-                    if (!Char.IsDigit(RNG.ElementAt(i)))
+                    if (!char.IsDigit(RNG.ElementAt(i)))
                     {
                         return BadRequest();
                     }
