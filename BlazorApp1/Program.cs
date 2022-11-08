@@ -25,7 +25,8 @@ builder.Services.AddScoped<DeviceService>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddSqlServer<CapstoneDBContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddDbContext<CapstoneDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddHttpClient();
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -52,5 +53,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
 app.Run();
