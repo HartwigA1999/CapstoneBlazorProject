@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BlazorApp1.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dev")]
     [ApiController]
     public class DeviceController : ControllerBase
     {
@@ -19,25 +19,25 @@ namespace BlazorApp1.Controllers
         }
 
 
-        [HttpPatch("assign/{id:int}/{RNG:int}")]
+        [HttpPatch("{id:int}/{RNG:int}")]
         //assigns RNG from Database
         public async Task<ActionResult<Device>> AssignRNG(int id, int RNG)
         {
             // Device dev = new Device();
             //find device with proper id
-            //string random = "";
-            //random = Convert.ToString(RNG);
+            string random = "";
+            random = Convert.ToString(RNG);
 
-          
+
             var dev = await _dbContext.Device.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (dev == null) { return BadRequest("hi"); }
 
             else
             {
-                //if (random.Length != 6)
-                //{
-                //    return BadRequest("here");
-                //}
+                if (random.Length != 6)
+                {
+                    return BadRequest("here");
+                }
                 //for (int i = 0; i < 6; i++)
                 //{
                 //    if (!char.IsDigit(random.ElementAt(i)))
@@ -46,8 +46,8 @@ namespace BlazorApp1.Controllers
                 //    }
                 //}
 
-                dev.Temp = RNG;
-                
+                dev.RandomNum = random;
+                _dbContext.SaveChanges();
                 return Ok(dev);
             }
         }
