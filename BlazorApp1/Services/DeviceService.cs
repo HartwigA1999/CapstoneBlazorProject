@@ -37,6 +37,7 @@ namespace BlazorApp1.Services
                 Exsisting.Humidity = obj.Humidity;
                 Exsisting.DateTime = obj.DateTime;
                 Exsisting.Name = obj.Name;
+                Exsisting.UserName = obj.UserName;
                 _dbContext.SaveChanges();
             }
             else

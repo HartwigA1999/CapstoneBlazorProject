@@ -214,6 +214,9 @@
         Showpopup = false;
         obj.Name = "";
         obj.UserName = "";
+        obj.Humidity = 0;
+        obj.SoilMoisture = 0;
+        obj.Temp = 0;
         var result = await Service.UpdateDeviceAsync(obj);
     }
 }

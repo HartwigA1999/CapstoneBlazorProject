@@ -63,6 +63,14 @@ namespace BlazorApp1.Controllers
             return Ok(dev);
 
         }
+        [HttpPatch("update/{id:int}")]
+        
+        //public async Task<ActionResult<Device>> Update([FromBody] string input, int id)
+        //{
+        //    return 0;
+        //    //gonna have to take 1 whole string from Json body and parse it to get the values we neeed
+
+        //}
 
     }
 }
