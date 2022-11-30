@@ -2,6 +2,7 @@
 using BlazorApp1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
@@ -65,12 +66,35 @@ namespace BlazorApp1.Controllers
         }
         [HttpPatch("update/{id:int}")]
         
-        //public async Task<ActionResult<Device>> Update([FromBody] string input, int id)
-        //{
-        //    return 0;
-        //    //gonna have to take 1 whole string from Json body and parse it to get the values we neeed
+        public async Task<ActionResult<Device>> Update([FromBody] string input, int id)
+        {
 
-        //}
+            var dev = await _dbContext.Device.Where(x => x.Id == id).FirstOrDefaultAsync();
+            if (dev == null)
+            {
+                return BadRequest();
+            }
+            string[] words = input.Split("+");
+
+
+            //load temp
+            if (words.Length == 4)
+            {
+                dev.Temp = Convert.ToDouble(words.ElementAt(0));
+                dev.Humidity = Convert.ToDouble(words.ElementAt(1));
+                dev.WindSpeed = Convert.ToDouble(words.ElementAt(2));
+                dev.SoilMoisture = Convert.ToDouble(words.ElementAt(3));
+                dev.DateTime = DateTime.Now;
+
+                _dbContext.SaveChanges();
+
+                return Ok(dev);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
     }
 }
