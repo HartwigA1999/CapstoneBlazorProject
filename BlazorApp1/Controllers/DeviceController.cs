@@ -64,6 +64,7 @@ namespace BlazorApp1.Controllers
             return Ok(dev);
 
         }
+
         [HttpPatch("update/{id:int}")]
         
         public async Task<ActionResult<Device>> Update([FromBody] string input, int id)
@@ -72,7 +73,7 @@ namespace BlazorApp1.Controllers
             var dev = await _dbContext.Device.Where(x => x.Id == id).FirstOrDefaultAsync();
             if (dev == null)
             {
-                return BadRequest();
+                return BadRequest("no device found");
             }
             string[] words = input.Split("+");
 
@@ -92,7 +93,7 @@ namespace BlazorApp1.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest("improper data format");
             }
         }
 
