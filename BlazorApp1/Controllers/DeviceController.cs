@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace BlazorApp1.Controllers
 {
@@ -65,37 +67,40 @@ namespace BlazorApp1.Controllers
 
         }
 
-        [HttpPatch("update/{id:int}")]
+        [HttpPatch("update")]
         
-        public async Task<ActionResult<Device>> Update([FromBody] string input, int id)
+        public async Task<ActionResult<Device>> Update([FromBody] DataInfo data)
         {
+          
 
-            var dev = await _dbContext.Device.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var dev = await _dbContext.Device.Where(x => x.Id == data.JId).FirstOrDefaultAsync();
             if (dev == null)
             {
                 return BadRequest("no device found");
             }
-            string[] words = input.Split("+");
-
-
-            //load temp
-            if (words.Length == 4)
-            {
-                dev.Temp = Convert.ToDouble(words.ElementAt(0));
-                dev.Humidity = Convert.ToDouble(words.ElementAt(1));
-                dev.WindSpeed = Convert.ToDouble(words.ElementAt(2));
-                dev.SoilMoisture = Convert.ToDouble(words.ElementAt(3));
-                dev.DateTime = DateTime.Now;
-
-                _dbContext.SaveChanges();
-
-                return Ok(dev);
-            }
-            else
-            {
-                return BadRequest("improper data format");
-            }
+            dev.Humidity = data.JHumidity;
+            dev.Temp = data.JTemperature;
+            dev.WindSpeed = data.JWindSpd;
+            dev.SoilMoisture = data.JSM;
+            dev.DateTime = DateTime.Now;
+            _dbContext.SaveChanges();
+            return Ok(dev);
         }
 
+    }
+
+    public class DataInfo
+    {
+        [JsonProperty("ID")]
+        public int JId { get; set; }
+        [JsonProperty("Temp")]
+        public double JTemperature { get; set; }
+        [JsonProperty("Humidity")]
+        public double JHumidity { get; set; }
+        [JsonProperty("WindSpeed")]
+        public double JWindSpd { get; set; }
+        
+        [JsonProperty("SoilMoisture")]
+        public double JSM { get; set; }
     }
 }
