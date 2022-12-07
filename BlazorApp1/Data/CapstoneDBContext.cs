@@ -20,14 +20,13 @@ namespace BlazorApp1.Data
         }
 
         public virtual DbSet<Device> Device { get; set; }
+        public virtual DbSet<OldData> OldData { get; set; }
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Device>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
@@ -35,6 +34,11 @@ namespace BlazorApp1.Data
                 entity.Property(e => e.RandomNum).HasMaxLength(6);
 
                 entity.Property(e => e.UserName).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<OldData>(entity =>
+            {
+                entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
             });
 
             modelBuilder.Entity<User>(entity =>
