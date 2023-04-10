@@ -23,6 +23,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddScoped<DeviceService>();
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<OldDataService>();
 builder.Services.AddSqlServer<CapstoneDBContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddDbContext<CapstoneDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient();

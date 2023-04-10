@@ -20,20 +20,20 @@ namespace BlazorApp1.Services
             return devices;
         }
         //Creates a new device in the database
-        public async Task<Device>CreateDeviceAsync(Device obj)
+        public async Task<Device> CreateDeviceAsync(Device obj)
         {
             _dbContext.Device.Add(obj);
             _dbContext.SaveChanges();
-            return await Task.FromResult(obj); 
+            return await Task.FromResult(obj);
         }
         //updates a device in the database
         public async Task<bool> UpdateDeviceAsync(Device obj)
         {
             var Exsisting = _dbContext.Device.Where(x => x.Id == obj.Id).FirstOrDefault();
-            if(Exsisting != null)
+            if (Exsisting != null)
             {
-                Exsisting.Temp=obj.Temp;
-                Exsisting.WindSpeed=obj.WindSpeed;
+                Exsisting.Temp = obj.Temp;
+                Exsisting.WindSpeed = obj.WindSpeed;
                 Exsisting.Humidity = obj.Humidity;
                 Exsisting.DateTime = obj.DateTime;
                 Exsisting.Name = obj.Name;
@@ -52,12 +52,12 @@ namespace BlazorApp1.Services
 
             dev = await _dbContext.Device.Where(x => x.RandomNum == rng).FirstOrDefaultAsync();
 
-            if(dev != null)
+            if (dev != null)
             {
                 dev.UserName = username;
                 dev.RandomNum = "FILLED";
                 return await Task.FromResult(true);
-                
+
             }
             else
             {
@@ -71,5 +71,14 @@ namespace BlazorApp1.Services
         //}
 
         //get old data function
+
+        public async Task<string> GetPictureDbAsync(int DeviceID)
+
+        {
+
+            PictureDb ThisPicCb = (PictureDb)_dbContext.PictureDb.Where(x => x.DeviceId == DeviceID);
+            return ThisPicCb.PictureData;
+
+        }
     }
 }

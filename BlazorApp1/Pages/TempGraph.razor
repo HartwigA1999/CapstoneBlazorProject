@@ -1,0 +1,165 @@
+﻿
+@page "/TempGraph"
+@using BlazorApp1.Data;
+@using BlazorApp1.Models
+@using BlazorApp1.Services
+@using ChartJs.Blazor;
+@using ChartJs.Blazor.Common;
+@using ChartJs.Blazor.Common.Axes;
+@using ChartJs.Blazor.Common.Enums;
+@using ChartJs.Blazor.LineChart;
+@using ChartJs.Blazor.Util;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+@inherits OwningComponentBase<OldDataService>
+
+
+<h3>Temperature Graph</h3>
+<AuthorizeView>
+    <Authorized>
+        @if(devices == null){
+         <p>Loading Devices...</p>
+        }
+        else{
+        @if(data == null)
+        {
+                <p>Loading regression data</p>
+            }
+            else
+            {
+                
+                //print data in a graph
+                if (_chart != null)
+                {
+                    
+                    <Chart Config="_config" @ref="_chart"></Chart>
+                }
+
+            }
+        //end of nested else
+        }
+
+        } @*end of else statement*@
+
+
+    </Authorized>
+
+
+</AuthorizeView>
+
+
+
+
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+
+    int deviceID = -1;
+    List<Device> devices = new List<Device>();
+    List<OldData> data = new List<OldData>();
+    private string UserIdentityName = "";
+    private LineConfig _config;
+    private Chart _chart;
+
+    //returns all devices related to  that username
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current user
+        if (authenticationStateTask != null)
+        {
+            var user = (await authenticationStateTask).User;
+
+            if (user.Identity != null)
+            {
+                UserIdentityName = user.Identity.Name ?? "";
+            }
+
+        }
+        devices = await Service.GetDevicesAsync(UserIdentityName);
+        if(devices != null)
+        {
+            //if devices is not null, it retrieves the first item in the list and builds the data list built off of that
+            deviceID = devices.ElementAt(0).Id;
+            data = await Service.GetDataAsync(deviceID);
+            sortList(data);
+        }
+        //config graph
+        _config = new LineConfig
+            {
+                Options = new LineOptions
+                {
+                    Responsive = true,
+                    Title = new OptionsTitle
+                    {
+                        Display = true,
+                        Text = "Temperature over time"
+                    },
+                    Tooltips = new Tooltips
+                    {
+                        Mode = InteractionMode.Nearest,
+                        Intersect = true
+                    },
+                    Hover = new Hover
+                    {
+                        Mode = InteractionMode.Nearest,
+                        Intersect = true
+                    },
+                    Scales = new Scales
+                    {
+
+                        XAxes = new List<CartesianAxis>
+                    {
+                        new CategoryAxis
+                        {
+                            ScaleLabel = new ScaleLabel
+                            {
+                                LabelString = "Date"
+                            }
+                        }
+                    },
+                        YAxes = new List<CartesianAxis>
+                    {
+                        new LinearCartesianAxis
+                        {
+                            ScaleLabel = new ScaleLabel
+                            {
+
+                                LabelString = "Temperature"
+                            }
+                        }
+                    }
+                    }
+
+                }
+        };//end of config
+          // now I need to use a dataset object to make a line
+        IDataset<OldData> dataset1 = new LineDataset<OldData>(data)
+            {
+                Label = "Temperature Data",
+                BackgroundColor = ColorUtil.FromDrawingColor(System.Drawing.Color.Blue),
+                BorderColor = ColorUtil.FromDrawingColor(System.Drawing.Color.Blue),
+                Fill = FillingMode.Disabled
+            };
+        //set data labels and config
+        _config.Data.Labels.Add("time");
+        _config.Data.Datasets.Add(dataset1);
+    }
+    async void ChangeID(int id)
+    {
+        data = await Service.GetDataAsync(deviceID);
+        sortList(data);
+    }
+
+    public async void sortList(List<OldData> dataList)
+    {
+        // sort the list by date time
+        //use setcount method in service to sort by date time
+        Service.SetCount(deviceID);
+        //count has now been set and the list can be rebuilt sorting by the count value
+
+    }
+
+}

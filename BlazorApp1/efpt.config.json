@@ -23,13 +23,19 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[PictureDB]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[User]",
          "ObjectType": 0
       }
    ],
    "UiHint": "stoutcapstoneserver.Capstone.dbo",
+   "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
    "UseDbContextSplitting": false,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
@@ -37,9 +43,7 @@
    "UseInflector": false,
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
-   "UseNoConstructor": false,
    "UseNoDefaultConstructor": false,
-   "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,

@@ -30,6 +30,14 @@ namespace BlazorApp1.Controllers
       [JsonPropertyName("SoilMoisture")]
         public double JSM { get; set; }
     }
+    public class PicInfo
+    {
+        [JsonPropertyName("ID")]
+        public int JId { get; set; }
+        [JsonPropertyName("Picture")]
+        public string? Picture { get; set; }
+
+    }
 
     [Route("api/dev")]
     [ApiController]
@@ -217,7 +225,7 @@ namespace BlazorApp1.Controllers
                         //0 − If date1 is the same as date2.
                         //> 0 − If date1 is later than date2.
                         OldData OldestData = dataList.ElementAt(0);
-                        for (int i = 1; i < 10; i++)
+                        for (int i = 1; i < dataList.Count-1; i++)
                         {
                             //if the next element in the list is older than the current element
                             if (DateTime.Compare((DateTime)OldestData.DateTime, (DateTime)dataList.ElementAt(i).DateTime) > 0)
@@ -267,6 +275,24 @@ namespace BlazorApp1.Controllers
             
         
             
+        }
+
+        [HttpPatch("picture")]
+        public async Task<ActionResult<PictureDb>> PictureStore([FromBody] PicInfo PicData)
+        { 
+            PictureDb ThisPic = new PictureDb();
+            if (PicData.Picture != null)
+            {
+                ThisPic.DeviceId = PicData.JId;
+                ThisPic.PictureData = PicData.Picture;
+                _dbContext.Add(ThisPic);
+                _dbContext.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
     }
