@@ -37,6 +37,7 @@ namespace BlazorApp1.Services
                 Exsisting.Humidity = obj.Humidity;
                 Exsisting.DateTime = obj.DateTime;
                 Exsisting.Name = obj.Name;
+                Exsisting.Gdelta = obj.Gdelta;
                 Exsisting.UserName = obj.UserName;
                 _dbContext.SaveChanges();
             }
@@ -72,13 +73,6 @@ namespace BlazorApp1.Services
 
         //get old data function
 
-        public async Task<string> GetPictureDbAsync(int DeviceID)
 
-        {
-
-            PictureDb ThisPicCb = (PictureDb)_dbContext.PictureDb.Where(x => x.DeviceId == DeviceID);
-            return ThisPicCb.PictureData;
-
-        }
     }
 }

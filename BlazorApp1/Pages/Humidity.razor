@@ -1,9 +1,9 @@
-﻿@page "/TempGraph"
+﻿@page "/Humidity"
 @using C1.Chart;
 @using C1.Blazor.Chart;
 
 
-<PageTitle>Temperature Graphs</PageTitle>
+<PageTitle>Humidity Graphs</PageTitle>
 
 @using BlazorApp1.Models
 @using BlazorApp1.Services
@@ -15,32 +15,32 @@
         <p>youre not logged in!</p>
     </NotAuthorized>
     <Authorized>
-        @if(devices == null || old == null)
+        @if (devices == null || old == null)
         {
             <p><em>Loading...</em></p>
         }
         else
         {
-            foreach(var device in devices)
+            foreach (var device in devices)
             {
                 <header>@device.Name</header>
-                
+
                 @*<FlexChart ItemsSource="oldD" BindingX="Count">
-                    <SeriesCollection>
-                        <Series Binding="Temp" />
-                    </SeriesCollection>
-                </FlexChart>*@
+        <SeriesCollection>
+        <Series Binding="Temp" />
+        </SeriesCollection>
+        </FlexChart>*@
 
                 <FlexChart ItemsSource="oldD" BindingX="count" ChartType="ChartType.SplineSymbols" HeaderContent="Last 10 Days" HeaderStyle="font-size:24px">
                     <SeriesCollection>
-                        <Series Binding="Temp" />
+                        <Series Binding="Humidity" />
                     </SeriesCollection>
                     <AxisCollection>
                         <Axis AxisType="AxisType.X" Position="Position.Bottom" AxisLine="false" Format="MMM-d" MajorTickMarks="TickMark.None" />
-                        <Axis AxisType="AxisType.Y" Position="Position.Left" Title="Temperature, F" AxisLine="false" MajorTickMarks="TickMark.None" MajorGrid="true" />
+                        <Axis AxisType="AxisType.Y" Position="Position.Left" Title="Humidity, %" AxisLine="false" MajorTickMarks="TickMark.None" MajorGrid="true" />
                     </AxisCollection>
                 </FlexChart>
-            
+
             }
         }
     </Authorized>
@@ -80,7 +80,7 @@
         List<OldData> thisList = new List<OldData>();
 
         thisList = await Service.GetDataAsync(id);
-        
+
         oldD = thisList.ToArray();
         return oldD;
     }

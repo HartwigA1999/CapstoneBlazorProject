@@ -21,7 +21,6 @@ namespace BlazorApp1.Data
 
         public virtual DbSet<Device> Device { get; set; }
         public virtual DbSet<OldData> OldData { get; set; }
-        public virtual DbSet<PictureDb> PictureDb { get; set; }
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +28,8 @@ namespace BlazorApp1.Data
             modelBuilder.Entity<Device>(entity =>
             {
                 entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Gdelta).HasColumnName("GDelta");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
@@ -40,19 +41,6 @@ namespace BlazorApp1.Data
             modelBuilder.Entity<OldData>(entity =>
             {
                 entity.Property(e => e.DateTime).HasColumnType("smalldatetime");
-            });
-
-            modelBuilder.Entity<PictureDb>(entity =>
-            {
-                entity.ToTable("PictureDB");
-
-                entity.Property(e => e.DeviceId).HasColumnName("DeviceID");
-
-                entity.Property(e => e.PictureData).IsUnicode(false);
-
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<User>(entity =>

@@ -13,6 +13,7 @@ namespace BlazorApp1.Models
         public double? Humidity { get; set; }
         public double? SoilMoisture { get; set; }
         public double? WindSpeed { get; set; }
+        public double? Gdelta { get; set; }
         public DateTime? DateTime { get; set; }
         public int? Count { get; set; }
     }

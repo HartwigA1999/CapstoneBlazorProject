@@ -18,10 +18,16 @@ namespace BlazorApp1.Services
             _dbContext.SaveChanges();
             return await Task.FromResult(obj);
         }
-        public async Task<List<OldData>> GetDataAsync(int devID)
+        public Task<List<OldData>> GetDataAsync(int devID)
         {
-            var OldDevices = await _dbContext.OldData.Where(x => x.DeviceId == devID).AsNoTracking().ToListAsync();
+            var OldDevices = _dbContext.OldData.Where(x => x.DeviceId == devID).AsNoTracking().ToListAsync();
             return OldDevices;
+        }
+        public Task<OldData[]> GetDataArray(int devID)
+         {
+            object toArray = _dbContext.OldData.Where(x => x.DeviceId == devID).ToArray();
+            object OldDevices = toArray;
+            return (Task<OldData[]>)OldDevices;
         }
         public async Task<List<Device>> GetDevicesAsync(string user)
         {

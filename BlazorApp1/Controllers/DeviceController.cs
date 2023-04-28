@@ -24,21 +24,15 @@ namespace BlazorApp1.Controllers
         public double JTemperature { get; set; }
        [JsonPropertyName("Humidity")]
         public double JHumidity { get; set; }
-       [JsonPropertyName("WindSpeed")]
+        [JsonPropertyName("WindSpeed")]
         public double JWindSpd { get; set; }
 
-      [JsonPropertyName("SoilMoisture")]
+        [JsonPropertyName("SoilMoisture")]
         public double JSM { get; set; }
-    }
-    public class PicInfo
-    {
-        [JsonPropertyName("ID")]
-        public int JId { get; set; }
-        [JsonPropertyName("Picture")]
-        public string? Picture { get; set; }
 
+        [JsonPropertyName("Delta")]
+        public double JDelta { get; set; }
     }
-
     [Route("api/dev")]
     [ApiController]
     public class DeviceController : ControllerBase
@@ -144,6 +138,7 @@ namespace BlazorApp1.Controllers
                         newData.Temp = dev.Temp;
                         newData.WindSpeed = dev.WindSpeed;
                         newData.SoilMoisture = dev.SoilMoisture;
+                        newData.Gdelta = dev.Gdelta;
                         newData.DateTime = (DateTime)dev.DateTime;
                         _dbContext.SaveChanges();
                     }
@@ -158,6 +153,7 @@ namespace BlazorApp1.Controllers
                 newDevice.Temp = dev.Temp;
                 newDevice.WindSpeed = dev.WindSpeed;
                 newDevice.SoilMoisture = dev.SoilMoisture;
+                newDevice.Gdelta = dev.Gdelta;
                 newDevice.DateTime = (DateTime)dev.DateTime;
                 _dbContext.Add(newDevice);
             }
@@ -191,6 +187,7 @@ namespace BlazorApp1.Controllers
                 dev.Temp = data.JTemperature;
                 dev.WindSpeed = data.JWindSpd;
                 dev.SoilMoisture = data.JSM;
+                dev.Gdelta = data.JDelta;
                 dev.DateTime = DateTime.Now;
 
 
@@ -210,6 +207,7 @@ namespace BlazorApp1.Controllers
                         newDevice.Temp = dev.Temp;
                         newDevice.WindSpeed = dev.WindSpeed;
                         newDevice.SoilMoisture = dev.SoilMoisture;
+                        newDevice.Gdelta = dev.Gdelta;
                         newDevice.DateTime = (DateTime)dev.DateTime;
                         _dbContext.Add(newDevice);
                         _dbContext.SaveChanges();
@@ -250,8 +248,8 @@ namespace BlazorApp1.Controllers
                             newData.WindSpeed = dev.WindSpeed;
                             newData.SoilMoisture = dev.SoilMoisture;
                             newData.DateTime = (DateTime)dev.DateTime;
-
-                            _dbContext.SaveChanges();
+                            newData.Gdelta = dev.Gdelta;
+                        _dbContext.SaveChanges();
                         }
                     }
 
@@ -268,6 +266,7 @@ namespace BlazorApp1.Controllers
                 newDevice.WindSpeed = dev.WindSpeed;
                 newDevice.SoilMoisture = dev.SoilMoisture;
                 newDevice.DateTime = (DateTime)dev.DateTime;
+                newDevice.Gdelta = dev.Gdelta;
                 _dbContext.Add(newDevice);
                 _dbContext.SaveChanges();
                 return Ok(dev);
@@ -277,23 +276,7 @@ namespace BlazorApp1.Controllers
             
         }
 
-        [HttpPatch("picture")]
-        public async Task<ActionResult<PictureDb>> PictureStore([FromBody] PicInfo PicData)
-        { 
-            PictureDb ThisPic = new PictureDb();
-            if (PicData.Picture != null)
-            {
-                ThisPic.DeviceId = PicData.JId;
-                ThisPic.PictureData = PicData.Picture;
-                _dbContext.Add(ThisPic);
-                _dbContext.SaveChanges();
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
+        
 
     }
 }

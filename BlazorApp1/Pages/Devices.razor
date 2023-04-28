@@ -24,6 +24,7 @@
                     <th>Humidity</th>
                     <th>WindSpeed</th>
                     <th>Soil Saturation</th>
+                    <th>Growth rate</th>
                     <th></th>
                 </tr>
             </thead>
@@ -36,6 +37,7 @@
                         <td>@device.Humidity</td>
                         <td>@device.WindSpeed</td>
                         <td>@device.SoilMoisture</td>
+                        <td>@device.Gdelta %</td>
                         <td>
                             <button class="btn btn-primary"
                                     @onclick="(() => EditDevice(device))">

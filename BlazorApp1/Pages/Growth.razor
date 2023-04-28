@@ -1,9 +1,9 @@
-﻿@page "/TempGraph"
+﻿@page "/Growth"
 @using C1.Chart;
 @using C1.Blazor.Chart;
 
 
-<PageTitle>Temperature Graphs</PageTitle>
+<PageTitle>Growth Graph</PageTitle>
 
 @using BlazorApp1.Models
 @using BlazorApp1.Services
@@ -33,11 +33,11 @@
 
                 <FlexChart ItemsSource="oldD" BindingX="count" ChartType="ChartType.SplineSymbols" HeaderContent="Last 10 Days" HeaderStyle="font-size:24px">
                     <SeriesCollection>
-                        <Series Binding="Temp" />
+                        <Series Binding="Gdelta" />
                     </SeriesCollection>
                     <AxisCollection>
                         <Axis AxisType="AxisType.X" Position="Position.Bottom" AxisLine="false" Format="MMM-d" MajorTickMarks="TickMark.None" />
-                        <Axis AxisType="AxisType.Y" Position="Position.Left" Title="Temperature, F" AxisLine="false" MajorTickMarks="TickMark.None" MajorGrid="true" />
+                        <Axis AxisType="AxisType.Y" Position="Position.Left" Title="Growth, %" AxisLine="false" MajorTickMarks="TickMark.None" MajorGrid="true" />
                     </AxisCollection>
                 </FlexChart>
             
