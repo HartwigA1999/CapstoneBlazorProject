@@ -209,6 +209,8 @@ namespace BlazorApp1.Controllers
                         newDevice.SoilMoisture = dev.SoilMoisture;
                         newDevice.Gdelta = dev.Gdelta;
                         newDevice.DateTime = (DateTime)dev.DateTime;
+                        newDevice.Count = 1;
+                    
                         _dbContext.Add(newDevice);
                         _dbContext.SaveChanges();
                         return Ok(dev);
@@ -249,12 +251,30 @@ namespace BlazorApp1.Controllers
                             newData.SoilMoisture = dev.SoilMoisture;
                             newData.DateTime = (DateTime)dev.DateTime;
                             newData.Gdelta = dev.Gdelta;
-                        _dbContext.SaveChanges();
+                          //  newData.Count = 1;
+                            _dbContext.SaveChanges();
+                        
                         }
                     }
-
-
+                //sort data by age
+                for (int i = 0; i < dataList.Count() - 1; i++)
+                {
+                    OldData OldestData = dataList.ElementAt(i);
+                    for (int j = i; j < dataList.Count - 1; j++)
+                    {
+                        //if the next element in the list is older than the current element
+                        if (DateTime.Compare((DateTime)OldestData.DateTime, (DateTime)dataList.ElementAt(i).DateTime) > 0)
+                        {
+                            OldestData = dataList.ElementAt(i);
+                        }
+                    }
+                    //set oldest data count to new count
+                    OldestData.Count = i + 1;
                     _dbContext.SaveChanges();
+                }
+
+
+                _dbContext.SaveChanges();
                     return Ok(dev);
                 }
             else
@@ -272,6 +292,7 @@ namespace BlazorApp1.Controllers
                 return Ok(dev);
             }
             
+
         
             
         }
